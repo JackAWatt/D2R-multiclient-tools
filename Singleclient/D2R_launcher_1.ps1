@@ -2,7 +2,7 @@
 $bnet_email = 'changeme@gmail.com'
 $bnet_password = 'mypassword123'
 #default_region values can be eu/us/kr - default is applied when you do not provide any input and just press enter during region selection
-$default_region = 'eu'
+$region = 'eu'
 #======================================== Send me lot of FGs ==========================================================================================================
 
 
@@ -58,37 +58,6 @@ foreach($line in Get-Content $PSScriptRoot\d2r_handles.txt) {
     
 }
 
-#============= Preset email address in Bnet launcher  ============
-
-$bnet_config_path = "C:\Users\"+$pc_username+"\AppData\Roaming\Battle.net\Battle.net.config"
-$new_saved_accounts = "SavedAccountNames`": `"" +$bnet_email +"`","
-
-
-(Get-Content -Path $bnet_config_path) -replace "SavedAccountNames`": `".+@.+`",",$new_saved_accounts | Set-Content -Path $bnet_config_path
-
-
-#============= Let the user specify launch mode and region  ======
-
-
-Do {$launch_mode = Read-Host 'D2R - Select launch mode 1 or 2 (1 - Direct client, 2 - Bnet Launcher, Empty - Direct client)'}
-while ($launch_mode -ne '1' -and $launch_mode -ne '2' -and $launch_mode -ne '')
-
-
-$region = 'none yet'
-
-if($launch_mode -eq "1" -or $launch_mode -eq "")
-{
-    Do { $region = Read-Host 'Specify region eu/us/kr (no input -> default region)';Write-Host "Selected region: $($region)";}
-    while ($region -ne 'eu' -and $region -ne 'us' -and $region -ne 'kr' -and $region -ne '')	
-    if($region -eq '')
-    {
-        $region = $default_region
-    }
-    & "$PSScriptRoot\D2R.exe" -username $bnet_email -password $bnet_password -address $region'.actual.battle.net'
+ & "$PSScriptRoot\D2R.exe" -username $bnet_email -password $bnet_password -address $region'.actual.battle.net'
     
-    Write-Host 'Starting:'$region'.actual.battle.net'
-}else {
-    & "$PSScriptRoot\Diablo II Resurrected Launcher.exe"
-}
-
-#read-host "Press ENTER to continue..."
+ Write-Host 'Starting:'$region'.actual.battle.net'
